@@ -4,7 +4,7 @@ defmodule Dsw.Database.Repo.Migrations.TemplateEditor do
   def change do
     create table(:template_editor) do
       add :name, :string
-      add :content, :string
+      add :content, :text
       add :created_by, :string
       add :app_uuid, :string
 
