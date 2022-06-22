@@ -58,14 +58,14 @@ defmodule Dsw.Service.Editor.Service do
     Repo.delete!(editor)
   end
 
-  def expand_and_publish(id) do
+  def expand_and_publish(id, req_body) do
     editor = get_template_editor(id)
 
     created_by = Process.get(:user)["uuid"]
     # TODO Change to app_uuid
     app_uuid = Process.get(:user)["uuid"]
 
-    expansion = create_expansion(editor, created_by, app_uuid)
+    expansion = create_expansion(req_body["rdf"], created_by, app_uuid)
     expand_command = create_expand_command(expansion, created_by, app_uuid)
     deploy_command = create_deploy_command(expansion, created_by, app_uuid)
     workflow = create_workflow(expand_command, deploy_command, created_by, app_uuid)
@@ -73,10 +73,10 @@ defmodule Dsw.Service.Editor.Service do
     workflow
   end
 
-  defp create_expansion(editor, created_by, app_uuid) do
+  defp create_expansion(rdf, created_by, app_uuid) do
     expansion =
       Expansion.changeset(
-        %Expansion{content: editor.content, created_by: created_by, app_uuid: app_uuid},
+        %Expansion{content: rdf, created_by: created_by, app_uuid: app_uuid},
         %{}
       )
 

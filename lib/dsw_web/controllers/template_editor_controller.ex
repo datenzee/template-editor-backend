@@ -28,7 +28,7 @@ defmodule DswWeb.TemplateEditorController do
   end
 
   def detail_expansions_and_publications_POST(conn, _params) do
-    res_dto = expand_and_publish(conn.path_params["id"])
+    res_dto = expand_and_publish(conn.path_params["id"], conn.body_params)
     json(conn, res_dto)
   end
 end
