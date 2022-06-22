@@ -1,6 +1,7 @@
 defmodule Dsw.Model.TemplateEditor do
   use Ecto.Schema
   import Ecto.Changeset
+  require Logger
   require Jason.Encoder
 
   @derive {Jason.Encoder, except: [:__meta__]}

@@ -4,15 +4,15 @@ defmodule Dsw.Kaffy.Core.Config do
       dsw: [
         name: "Dsw",
         resources: [
-          persistentCommand: [
+          persistent_command: [
             schema: Dsw.Model.PersistentCommand,
             admin: Dsw.Admin.PersistentCommand
           ],
-          persistentWorkflow: [
+          persistent_workflow: [
             schema: Dsw.Model.PersistentWorkflow,
             admin: Dsw.Admin.PersistentWorkflow
           ],
-          templateEditor: [schema: Dsw.Model.TemplateEditor, admin: Dsw.Admin.TemplateEditor],
+          template_editor: [schema: Dsw.Model.TemplateEditor, admin: Dsw.Admin.TemplateEditor],
           user: [schema: Dsw.Model.User, admin: Dsw.Admin.User]
         ]
       ]
