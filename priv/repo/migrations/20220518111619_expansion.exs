@@ -3,7 +3,7 @@ defmodule Dsw.Database.Repo.Migrations.Expansion do
 
   def change do
     create table(:expansion) do
-      add :content, :string
+      add :content, :text
       add :state, :string
       add :path, :string
       add :created_by, :string
