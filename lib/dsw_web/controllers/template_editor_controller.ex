@@ -1,6 +1,6 @@
 defmodule DswWeb.TemplateEditorController do
   use DswWeb, :controller
-  import Dsw.Service.Editor.Service
+  import Dsw.Service.TemplateEditor.Service
 
   def list_GET(conn, _params) do
     res_dto = get_template_editors(conn.query_params)
@@ -27,8 +27,4 @@ defmodule DswWeb.TemplateEditorController do
     send_resp(conn, :no_content, [])
   end
 
-  def detail_expansions_and_publications_POST(conn, _params) do
-    res_dto = expand_and_publish(conn.path_params["id"], conn.body_params)
-    json(conn, res_dto)
-  end
 end

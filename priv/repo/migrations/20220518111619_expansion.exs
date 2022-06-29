@@ -9,6 +9,8 @@ defmodule Dsw.Database.Repo.Migrations.Expansion do
       add :created_by, :string
       add :app_uuid, :string
 
+      add :template_editor_id, references(:template_editor)
+
       timestamps()
     end
   end

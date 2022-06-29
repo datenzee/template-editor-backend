@@ -3,14 +3,17 @@ defmodule Dsw.Model.TemplateEditor do
   import Ecto.Changeset
   require Logger
   require Jason.Encoder
+  alias Dsw.Model.Expansion
 
-  @derive {Jason.Encoder, except: [:__meta__]}
+  @derive {Jason.Encoder, except: [:__meta__, :expansions]}
 
   schema "template_editor" do
     field :name, :string
     field :content, :string
     field :created_by, :string
     field :app_uuid, :string
+
+    has_many :expansions, Expansion
 
     timestamps()
   end

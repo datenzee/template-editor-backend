@@ -4,6 +4,10 @@ defmodule Dsw.Kaffy.Core.Config do
       dsw: [
         name: "Dsw",
         resources: [
+          expansion: [
+            schema: Dsw.Model.Expansion,
+            admin: Dsw.Admin.Expansion
+          ],
           persistent_command: [
             schema: Dsw.Model.PersistentCommand,
             admin: Dsw.Admin.PersistentCommand

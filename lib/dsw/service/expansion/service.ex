@@ -1,4 +1,4 @@
-defmodule Dsw.Service.Editor.Service do
+defmodule Dsw.Service.Expansion.Service do
   alias Dsw.Database.Repo
   alias Dsw.Model.TemplateEditor
   alias Dsw.Model.Expansion
@@ -6,55 +6,23 @@ defmodule Dsw.Service.Editor.Service do
   alias Dsw.Model.PersistentWorkflow
   alias DswWeb.Dto.Page
   alias Dsw.Database.PersistentCommand.Notification
+  import Ecto.Query
+  import Dsw.Service.TemplateEditor.Service
   require Logger
 
-  def get_template_editors(query_params) do
-    editor_page =
-      TemplateEditor
+  def get_expansions(template_editor_id, query_params) do
+    page =
+      Expansion
+      |> where([e], e.template_editor_id == ^template_editor_id)
       |> Repo.paginate(query_params)
 
     %Page{
-      entries: editor_page.entries,
-      page_number: editor_page.page_number,
-      page_size: editor_page.page_size,
-      total_entries: editor_page.total_entries,
-      total_pages: editor_page.total_pages
+      entries: page.entries,
+      page_number: page.page_number,
+      page_size: page.page_size,
+      total_entries: page.total_entries,
+      total_pages: page.total_pages
     }
-  end
-
-  def create_template_editor(req_body) do
-    created_by = Process.get(:user)["uuid"]
-    app_uuid = Process.get(:app_uuid)
-
-    editor =
-      TemplateEditor.changeset(
-        %TemplateEditor{created_by: created_by, app_uuid: app_uuid},
-        req_body
-      )
-
-    Repo.insert!(editor)
-  end
-
-  def get_template_editor(id) do
-    Repo.get!(Dsw.Model.TemplateEditor, id)
-  end
-
-  def update_template_editor(id, req_body) do
-    editor = get_template_editor(id)
-
-    updatedEditor =
-      TemplateEditor.changeset(
-        editor,
-        req_body
-      )
-
-    Repo.update!(updatedEditor)
-  end
-
-  def delete_template_editor(id) do
-    editor = get_template_editor(id)
-
-    Repo.delete!(editor)
   end
 
   def expand_and_publish(id, req_body) do
@@ -63,7 +31,7 @@ defmodule Dsw.Service.Editor.Service do
     created_by = Process.get(:user)["uuid"]
     app_uuid = Process.get(:app_uuid)
 
-    expansion = create_expansion(req_body["rdf"], created_by, app_uuid)
+    expansion = create_expansion(editor, req_body["rdf"], created_by, app_uuid)
     expand_command = create_expand_command(expansion, created_by, app_uuid)
     deploy_command = create_deploy_command(expansion, created_by, app_uuid)
     workflow = create_workflow(expand_command, deploy_command, created_by, app_uuid)
@@ -71,10 +39,10 @@ defmodule Dsw.Service.Editor.Service do
     workflow
   end
 
-  defp create_expansion(rdf, created_by, app_uuid) do
+  defp create_expansion(editor, rdf, created_by, app_uuid) do
     expansion =
       Expansion.changeset(
-        %Expansion{content: rdf, created_by: created_by, app_uuid: app_uuid},
+        %Expansion{content: rdf, created_by: created_by, app_uuid: app_uuid, template_editor_id: editor.id},
         %{}
       )
 
@@ -94,7 +62,8 @@ defmodule Dsw.Service.Editor.Service do
         %{}
       )
 
-    Repo.insert!(expand_command) |> Repo.preload(:persistent_workflow)
+    Repo.insert!(expand_command)
+    |> Repo.preload(:persistent_workflow)
   end
 
   defp create_deploy_command(expansion, created_by, app_uuid) do
@@ -110,7 +79,8 @@ defmodule Dsw.Service.Editor.Service do
         %{}
       )
 
-    Repo.insert!(deploy_command) |> Repo.preload(:persistent_workflow)
+    Repo.insert!(deploy_command)
+    |> Repo.preload(:persistent_workflow)
   end
 
   defp create_workflow(expand_command, deploy_command, created_by, app_uuid) do
@@ -126,6 +96,8 @@ defmodule Dsw.Service.Editor.Service do
         %{}
       )
 
-    Repo.insert!(workflow) |> Repo.preload(:commands)
+    Repo.insert!(workflow)
+    |> Repo.preload(:commands)
   end
+
 end

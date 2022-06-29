@@ -19,9 +19,8 @@ defmodule DswWeb.Router do
     put "/template-editors/:id", TemplateEditorController, :detail_PUT
     delete "/template-editors/:id", TemplateEditorController, :detail_DELETE
 
-    post "/template-editors/:id/expansions-and-publications",
-         TemplateEditorController,
-         :detail_expansions_and_publications_POST
+    get "/template-editors/:id/expansions", ExpansionController, :list_GET
+    post "/template-editors/:id/expansions", ExpansionController, :expansions_POST
   end
 
   # Enables LiveDashboard only for development
