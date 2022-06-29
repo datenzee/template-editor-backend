@@ -24,8 +24,7 @@ defmodule Dsw.Service.Editor.Service do
 
   def create_template_editor(req_body) do
     created_by = Process.get(:user)["uuid"]
-    # TODO Change to app_uuid
-    app_uuid = Process.get(:user)["uuid"]
+    app_uuid = Process.get(:app_uuid)
 
     editor =
       TemplateEditor.changeset(
@@ -62,8 +61,7 @@ defmodule Dsw.Service.Editor.Service do
     editor = get_template_editor(id)
 
     created_by = Process.get(:user)["uuid"]
-    # TODO Change to app_uuid
-    app_uuid = Process.get(:user)["uuid"]
+    app_uuid = Process.get(:app_uuid)
 
     expansion = create_expansion(req_body["rdf"], created_by, app_uuid)
     expand_command = create_expand_command(expansion, created_by, app_uuid)

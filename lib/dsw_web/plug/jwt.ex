@@ -14,12 +14,15 @@ defmodule DswWeb.Plug.Jwt do
       DswClient.client(token)
       |> DswClient.get_users_current()
 
-    # TODO Change to app_uuid
-    Logger.metadata(identity: user["uuid"], app: user["uuid"])
+    # TODO Get app_uuid dynamically
+    app_uuid = "00000000-0000-0000-0000-000000000000"
+
+    Logger.metadata(identity: user["uuid"], app: app_uuid)
 
     Process.put(:user, user)
+    Process.put(:app_uuid, app_uuid)
 
-    Plug.Conn.assign(conn, :user, user)
+    conn
   end
 
   defp extract_token(conn) do
