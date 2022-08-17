@@ -10,6 +10,8 @@ defmodule Dsw.Model.TemplateEditor do
   schema "template_editor" do
     field :name, :string
     field :content, :string
+    field :url, :string
+    field :data_url, :string
     field :created_by, :string
     field :app_uuid, :string
 
@@ -21,7 +23,7 @@ defmodule Dsw.Model.TemplateEditor do
   @doc false
   def changeset(entity, attrs) do
     entity
-    |> cast(attrs, [:name, :content, :created_by, :app_uuid])
+    |> cast(attrs, [:name, :content, :url, :data_url, :created_by, :app_uuid])
     |> validate_required([:name, :content, :created_by, :app_uuid])
   end
 end

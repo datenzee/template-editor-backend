@@ -6,6 +6,7 @@ defmodule Dsw.Service.Expansion.Service do
   alias Dsw.Model.PersistentWorkflow
   alias DswWeb.Dto.Page
   alias Dsw.Database.PersistentCommand.Notification
+  alias Dsw.Integration.ExpanderClient
   import Ecto.Query
   import Dsw.Service.TemplateEditor.Service
   require Logger
@@ -25,24 +26,44 @@ defmodule Dsw.Service.Expansion.Service do
     }
   end
 
-  def expand_and_publish(id, req_body) do
+  def expand(id, req_body) do
     editor = get_template_editor(id)
 
     created_by = Process.get(:user)["uuid"]
     app_uuid = Process.get(:app_uuid)
 
-    expansion = create_expansion(editor, req_body["rdf"], created_by, app_uuid)
-    expand_command = create_expand_command(expansion, created_by, app_uuid)
-    deploy_command = create_deploy_command(expansion, created_by, app_uuid)
-    workflow = create_workflow(expand_command, deploy_command, created_by, app_uuid)
-    Notification.notify(expand_command)
-    workflow
+    url =
+      ExpanderClient.client()
+      |> ExpanderClient.expand(editor.id, req_body["rdf"], "vue")
+
+    create_expansion(editor, req_body["rdf"], url, created_by, app_uuid)
+
+    update_template_editor(editor.id, %{url: url})
+
+    %{url: url}
+
+    #    ---------------------------------------------
+    #    We will not use commands for now
+    #    ---------------------------------------------
+    #    expand_command = create_expand_command(expansion, created_by, app_uuid)
+    #    deploy_command = create_deploy_command(expansion, created_by, app_uuid)
+    #    workflow = create_workflow(expand_command, deploy_command, created_by, app_uuid)
+    #    Notification.notify(expand_command)
+    #    workflow
+    #    ---------------------------------------------
   end
 
-  defp create_expansion(editor, rdf, created_by, app_uuid) do
+  defp create_expansion(editor, rdf, url, created_by, app_uuid) do
     expansion =
       Expansion.changeset(
-        %Expansion{content: rdf, created_by: created_by, app_uuid: app_uuid, template_editor_id: editor.id},
+        %Expansion{
+          content: rdf,
+          path: url,
+          state: :Done,
+          created_by: created_by,
+          app_uuid: app_uuid,
+          template_editor_id: editor.id
+        },
         %{}
       )
 
@@ -99,5 +120,4 @@ defmodule Dsw.Service.Expansion.Service do
     Repo.insert!(workflow)
     |> Repo.preload(:commands)
   end
-
 end
