@@ -3,8 +3,14 @@ defmodule Dsw.Integration.ExpanderClient do
   require Logger
   alias Dsw.Model.Exception.InternalServerErrorException
 
-  def expand(client, template_editor_id, content, expander_type) do
-    request_body = %{template_editor_id: template_editor_id, content: content, expander_type: expander_type}
+  def expand(client, template_editor_id, content, root_component, expander_type) do
+    request_body = %{
+      template_editor_id: template_editor_id,
+      content: content,
+      root_component: root_component,
+      expander_type: expander_type
+    }
+
     case post(client, "/expand", request_body) do
       {:ok, response} ->
         if response.status == 200 do
