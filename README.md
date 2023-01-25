@@ -1,4 +1,4 @@
-# Dsw
+# Template Editor Backend
 
 To start your Phoenix server:
 
