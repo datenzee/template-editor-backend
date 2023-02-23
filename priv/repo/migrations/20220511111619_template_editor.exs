@@ -9,6 +9,8 @@ defmodule Dsw.Database.Repo.Migrations.TemplateEditor do
       add :data_url, :text
       add :root_component, :text
       add :expander_type, :text
+      add :license, :text
+      add :base_url, :text
       add :created_by, :string
       add :app_uuid, :string
 

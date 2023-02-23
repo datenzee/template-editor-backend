@@ -14,6 +14,8 @@ defmodule Dsw.Model.TemplateEditor do
     field :data_url, :string
     field :root_component, :string
     field :expander_type, :string
+    field :license, :string
+    field :base_url, :string
     field :created_by, :string
     field :app_uuid, :string
 
@@ -25,7 +27,18 @@ defmodule Dsw.Model.TemplateEditor do
   @doc false
   def changeset(entity, attrs) do
     entity
-    |> cast(attrs, [:name, :content, :url, :data_url, :root_component, :expander_type, :created_by, :app_uuid])
+    |> cast(attrs, [
+      :name,
+      :content,
+      :url,
+      :data_url,
+      :root_component,
+      :expander_type,
+      :license,
+      :base_url,
+      :created_by,
+      :app_uuid
+    ])
     |> validate_required([:name, :content, :created_by, :app_uuid])
   end
 end
