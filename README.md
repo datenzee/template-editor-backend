@@ -1,5 +1,9 @@
 # Template Editor Backend
 
+The repository contains backend application for the Template Editor. The frontend application can be found [here](https://github.com/datenzee/template-editor-frontend).
+
+## How to install
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
@@ -17,3 +21,7 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   * Docs: https://hexdocs.pm/phoenix
   * Forum: https://elixirforum.com/c/phoenix-forum
   * Source: https://github.com/phoenixframework/phoenix
+
+## License
+
+This project is licensed under the Apache License v2.0 - see the [LICENSE](LICENSE) file for more details.
