@@ -16,7 +16,7 @@ defmodule Dsw.Integration.DswClient do
 
   def client(token) do
     middleware = [
-      {Tesla.Middleware.BaseUrl, "https://api.datenzee.ds-wizard.org"},
+      {Tesla.Middleware.BaseUrl, "https://datenzee.ds-wizard.org/wizard-api"},
       Tesla.Middleware.JSON,
       {Tesla.Middleware.Headers, [{"authorization", "Bearer " <> token}]}
     ]

@@ -1,0 +1,26 @@
+name: Build
+
+on:
+  push:
+
+jobs:
+  btp:
+    name: Build-Tag-Push
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Checkout git repository
+      uses: actions/checkout@v4
+
+    - name: Fetch all git history
+      run: |
+        git fetch --prune --unshallow
+
+    - name: Docker build
+      run: |
+        docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD docker.ds-wizard.org
+        docker build -t docker.ds-wizard.org/template-editor-backend .
+        docker push docker.ds-wizard.org/template-editor-backend
+      env:
+        DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+        DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
