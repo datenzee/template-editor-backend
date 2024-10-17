@@ -34,7 +34,7 @@ defmodule Dsw.Service.Expansion.Service do
 
     url =
       ExpanderClient.client()
-      |> ExpanderClient.expand(editor.id, req_body["rdf"], editor.root_component, editor.expander_type)
+      |> ExpanderClient.expand(editor.id, req_body["rdf"], editor.root_component, editor.expander_type, editor.data_url)
 
     create_expansion(editor, req_body["rdf"], url, created_by, app_uuid)
 
